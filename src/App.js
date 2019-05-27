@@ -1,26 +1,21 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { useStore } from "effector-react";
+import { IonApp, IonPage } from "@ionic/react";
+import { Route, Switch } from "react-router-dom";
 
-function App() {
+import { appStore, wakeUp } from "./stores/app";
+import HomePage from "./pages/Home";
+
+export default () => {
+  const state = useStore(appStore);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <IonApp>
+      <IonPage>
+        <Switch>
+          <Route path="/" exatc component={HomePage} />
+        </Switch>
+      </IonPage>
+    </IonApp>
   );
-}
-
-export default App;
+};
