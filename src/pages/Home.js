@@ -3,19 +3,23 @@ import {
   IonPage,
   IonList,
   IonItem,
+  IonIcon,
   IonLabel,
   IonTitle,
   IonHeader,
+  IonButton,
   IonContent,
-  IonToolbar
+  IonToolbar,
+  IonButtons
 } from "@ionic/react";
 
-import { getTasks } from "../api/home";
+import { getTasks } from "../api/tasks";
+import CreateTask from "../modals/CreateTask";
 
 export default () => {
   const [tasks, setTasks] = useState([]);
+  const [isCreateTaskOpen, setCreateTaskOpen] = useState(false);
   const refreshTasks = () => getTasks().then(setTasks);
-
   useEffect(() => {
     refreshTasks();
   }, []);
@@ -25,6 +29,11 @@ export default () => {
       <IonHeader>
         <IonToolbar>
           <IonTitle>Home</IonTitle>
+          <IonButtons slot="primary">
+            <IonButton onClick={() => setCreateTaskOpen(true)}>
+              <IonIcon slot="icon-only" name="add" />
+            </IonButton>
+          </IonButtons>
         </IonToolbar>
       </IonHeader>
 
@@ -37,6 +46,10 @@ export default () => {
           ))}
         </IonList>
       </IonContent>
+      <CreateTask
+        isOpen={isCreateTaskOpen}
+        dismiss={() => setCreateTaskOpen(false)}
+      />
     </IonPage>
   );
 };
