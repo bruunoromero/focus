@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react"
 import {
   IonPage,
   IonList,
@@ -11,18 +11,28 @@ import {
   IonContent,
   IonToolbar,
   IonButtons
-} from "@ionic/react";
+} from "@ionic/react"
 
-import { getTasks } from "../api/tasks";
-import CreateTask from "../modals/CreateTask";
+import { getTasks, createTask } from "../api/tasks"
+import CreateTask from "../modals/CreateTask"
 
 export default () => {
-  const [tasks, setTasks] = useState([]);
-  const [isCreateTaskOpen, setCreateTaskOpen] = useState(false);
-  const refreshTasks = () => getTasks().then(setTasks);
+  const [tasks, setTasks] = useState([])
+  const [isCreateTaskOpen, setCreateTaskOpen] = useState(false)
+  const refreshTasks = () => getTasks().then(setTasks)
+
+  const dismiss = async task => {
+    if (tasks) {
+      await createTask(task)
+      await refreshTasks()
+    }
+
+    setCreateTaskOpen(false)
+  }
+
   useEffect(() => {
-    refreshTasks();
-  }, []);
+    refreshTasks()
+  }, [])
 
   return (
     <IonPage>
@@ -46,10 +56,7 @@ export default () => {
           ))}
         </IonList>
       </IonContent>
-      <CreateTask
-        isOpen={isCreateTaskOpen}
-        dismiss={() => setCreateTaskOpen(false)}
-      />
+      <CreateTask isOpen={isCreateTaskOpen} dismiss={dismiss} />
     </IonPage>
-  );
-};
+  )
+}

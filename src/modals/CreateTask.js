@@ -1,4 +1,5 @@
-import React from "react";
+import moment from "moment"
+import React, { useState } from "react"
 import {
   IonPage,
   IonIcon,
@@ -16,9 +17,16 @@ import {
   IonButtons,
   IonDatetime,
   IonSelectOption
-} from "@ionic/react";
+} from "@ionic/react"
+
+import Task from "../models/Task"
+
+const parseDate = (date = moment(date).format("HH[h] mm[m]"))
 
 export default ({ isOpen, onDismiss, dismiss }) => {
+  const [task, setTask] = useState(Task())
+  console.log(task)
+
   return (
     <IonModal isOpen={isOpen} onDismiss={onDismiss}>
       <IonPage>
@@ -26,7 +34,7 @@ export default ({ isOpen, onDismiss, dismiss }) => {
           <IonToolbar>
             <IonTitle>Modal</IonTitle>
             <IonButtons slot="end">
-              <IonButton onClick={dismiss}>
+              <IonButton onClick={() => dismiss()}>
                 <IonIcon slot="icon-only" name="close" />
               </IonButton>
             </IonButtons>
@@ -37,17 +45,20 @@ export default ({ isOpen, onDismiss, dismiss }) => {
           <IonList>
             <IonItem>
               <IonLabel position="stacked">Nome da tarefa</IonLabel>
-              <IonInput />
+              <IonInput
+                onIonInput={e => setTask(task.set("name", e.target.value))}
+              />
             </IonItem>
             <IonItem>
               <IonLabel position="stacked">
                 Quantos tempo após acordar?
               </IonLabel>
-              <IonDatetime displayFormat="HH mm" />
-            </IonItem>
-            <IonItem>
-              <IonLabel position="stacked">Quantos tempo após acordar</IonLabel>
-              <IonDatetime displayFormat="HH mm" />
+              <IonDatetime
+                displayFormat="HH mm"
+                onIonChange={e =>
+                  setTask(task.set("delay", parseDate(e.target.value)))
+                }
+              />
             </IonItem>
             <IonItem>
               <IonLabel position="stacked">Repetir tarefa</IonLabel>
@@ -73,9 +84,11 @@ export default ({ isOpen, onDismiss, dismiss }) => {
               </IonSelect>
             </IonItem>
           </IonList>
-          <IonButton expand="block">Criar tarefa</IonButton>
+          <IonButton expand="block" onClick={() => dismiss()}>
+            Criar tarefa
+          </IonButton>
         </IonContent>
       </IonPage>
     </IonModal>
-  );
-};
+  )
+}
